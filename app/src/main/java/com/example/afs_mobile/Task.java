@@ -1,71 +1,164 @@
 package com.example.afs_mobile;
 
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.NumberPicker;
+import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.net.Socket;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Task#newInstance} factory method to
- * create an instance of this fragment.
- */
+
+
 public class Task extends Fragment {
 
     private Socket mClient;
+    PagerAdapter pagerAdapter;
+    ViewPager viewPager;
+    Button sendButton;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    int currentPage = 0;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-    public Task() {
-        // Required empty public constructor
-    }
+        View view = inflater.inflate(R.layout.fragment_task, container, false);
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Task.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Task newInstance(String param1, String param2) {
-        Task fragment = new Task();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+
+        return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        pagerAdapter = new PagerAdapter(getFragmentManager());
+        viewPager = view.findViewById(R.id.pager);
+        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
 
-        // Get socket
-        mClient = SocketHandler.getSocket();
+        //! Page count not to be destroyed.
+        viewPager.setOffscreenPageLimit(5);
+        viewPager.setAdapter(pagerAdapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                Toast.makeText(getActivity().getApplicationContext(),
+//                        "Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                currentPage = position;
+                Log.d("TASK", "Selected:" + position + " - " + currentPage);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        sendButton = (Button) view.findViewById(R.id.btnSendToDevice);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage == 0)
+                {
+                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
+
+                    if (null != tabNow)
+                    {
+                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
+                    }
+                    else {
+                        Log.d("TASK", "Fragment tab is NULL!");
+                    }
+
+                }
+                else if (currentPage == 1)
+                {
+                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
+
+                    if (null != tabNow)
+                    {
+                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
+                    }
+                    else {
+                        Log.d("TASK", "Fragment tab is NULL!");
+                    }
+                }
+                else if (currentPage == 2)
+                {
+                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
+
+                    if (null != tabNow)
+                    {
+                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
+                    }
+                    else {
+                        Log.d("TASK", "Fragment tab is NULL!");
+                    }
+                }
+                else if (currentPage == 3)
+                {
+                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
+
+                    if (null != tabNow)
+                    {
+                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
+                    }
+                    else {
+                        Log.d("TASK", "Fragment tab is NULL!");
+                    }
+                }
+                else if (currentPage == 4)
+                {
+                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
+
+                    if (null != tabNow)
+                    {
+                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
+                    }
+                    else {
+                        Log.d("TASK", "Fragment tab is NULL!");
+                    }
+                }
+            }
+        });
+
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task, container, false);
+    private static String makeFragmentName(int viewPagerId, int index)
+    {
+        return "android:switcher:" + viewPagerId + ":" + index;
     }
 }
+

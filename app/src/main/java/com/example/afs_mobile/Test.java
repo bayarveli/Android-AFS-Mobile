@@ -5,14 +5,17 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.StrictMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -25,6 +28,10 @@ import java.net.Socket;
 public class Test extends Fragment implements View.OnClickListener {
 
     private Socket mClient;
+    private int mMoveSpeedCounter = 130;
+    private int mFeedSpeedCounter = 130;
+    private EditText mMoveSpeedText;
+    private EditText mFeedSpeedText;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,13 +83,35 @@ public class Test extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_test, container, false);
 
-        Button leftButton = (Button) view.findViewById(R.id.button);
-        Button rightButton = (Button) view.findViewById(R.id.button3);
-        Button stopButton = (Button) view.findViewById(R.id.button4);
+        mMoveSpeedText = view.findViewById(R.id.etxtMoveSpeed);
+        mMoveSpeedText.setGravity(Gravity.CENTER_HORIZONTAL);
+        mMoveSpeedText.setText(Integer.toString(mMoveSpeedCounter));
+
+        mFeedSpeedText = view.findViewById(R.id.feedSpeed);
+        mFeedSpeedText.setGravity(Gravity.CENTER_HORIZONTAL);
+        mFeedSpeedText.setText(Integer.toString(mFeedSpeedCounter));
+
+        Button leftButton = (Button) view.findViewById(R.id.btnMoveLeft);
+        Button rightButton = (Button) view.findViewById(R.id.btnMoveRight);
+        Button stopButton = (Button) view.findViewById(R.id.btnMoveStop);
+        Button speedDecreaseButton = (Button) view.findViewById(R.id.btnMoveDecreaseSpeed);
+        Button speedIncreaseButton = (Button) view.findViewById(R.id.btnMoveIncreaseSpeed);
+
+        Button btnFeedDecrease = (Button) view.findViewById(R.id.btnFeedDecreaseSpeed);
+        Button btnFeedIncrease = (Button) view.findViewById(R.id.btnFeedIncreaseSpeed);
+        Button btnFeedStop = (Button) view.findViewById(R.id.btnFeedStop);
+        Button btnFeedStart = (Button) view.findViewById(R.id.btnFeedStart);
+
+        btnFeedDecrease.setOnClickListener(this);
+        btnFeedIncrease.setOnClickListener(this);
+        btnFeedStart.setOnClickListener(this);
+        btnFeedStop.setOnClickListener(this);
 
         leftButton.setOnClickListener(this);
         rightButton.setOnClickListener(this);
         stopButton.setOnClickListener(this);
+        speedDecreaseButton.setOnClickListener(this);
+        speedIncreaseButton.setOnClickListener(this);
 
         try {
             PrintWriter out = new PrintWriter(new BufferedWriter(
@@ -101,26 +130,92 @@ public class Test extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         String test = null;
+        byte[] messageBuffer = new byte[8];
+        int messageLen = 0;
 
         switch (v.getId()) {
-            case R.id.button:
-                test = "Left";
+            case R.id.btnMoveLeft:
+                messageBuffer[0] = 0x08;
+                messageLen = 1;
                 break;
-            case R.id.button3:
-                test = "Right";
+            case R.id.btnMoveRight:
+                messageBuffer[0] = 0x07;
+                messageLen = 1;
                 break;
-            case R.id.button4:
-                test = "Stop";
+            case R.id.btnMoveStop:
+                messageBuffer[0] = 0x09;
+                messageLen = 1;
+                break;
+            case R.id.btnMoveDecreaseSpeed:
+                mMoveSpeedCounter -= 5;
+                if (mMoveSpeedCounter < 0)
+                {
+                    mMoveSpeedCounter = 0;
+                }
+                mMoveSpeedText.setText(Integer.toString(mMoveSpeedCounter));
+                messageBuffer[0] = 0x0A;
+                messageBuffer[1] = (byte) mMoveSpeedCounter;
+                messageLen = 2;
+                break;
+            case R.id.btnMoveIncreaseSpeed:
+                mMoveSpeedCounter += 5;
+                if (mMoveSpeedCounter > 255)
+                {
+                    mMoveSpeedCounter = 255;
+                }
+                mMoveSpeedText.setText(Integer.toString(mMoveSpeedCounter));
+                messageBuffer[0] = 0x0A;
+                messageBuffer[1] = (byte) mMoveSpeedCounter;
+                messageLen = 2;
+                break;
+            case R.id.btnFeedStart:
+                messageBuffer[0] = 0x0B;
+                messageLen = 1;
+                break;
+            case R.id.btnFeedStop:
+                messageBuffer[0] = 0x0C;
+                messageLen = 1;
+                break;
+            case R.id.btnFeedDecreaseSpeed:
+                mFeedSpeedCounter -= 5;
+                if (mFeedSpeedCounter < 0)
+                {
+                    mFeedSpeedCounter = 0;
+                }
+                mFeedSpeedText.setText(Integer.toString(mFeedSpeedCounter));
+                messageBuffer[0] = 0x0D;
+                messageBuffer[1] = (byte) mFeedSpeedCounter;
+                messageLen = 2;
+                break;
+            case R.id.btnFeedIncreaseSpeed:
+                mFeedSpeedCounter += 5;
+                if (mFeedSpeedCounter > 255)
+                {
+                    mFeedSpeedCounter = 255;
+                }
+                mFeedSpeedText.setText(Integer.toString(mFeedSpeedCounter));
+                messageBuffer[0] = 0x0D;
+                messageBuffer[1] = (byte) mFeedSpeedCounter;
+                messageLen = 2;
                 break;
             default:
                 break;
         }
 
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mClient.getOutputStream())),
-                    true);
-            out.println(test);
+ //           PrintWriter out = new PrintWriter(new BufferedWriter(
+ //                   new OutputStreamWriter(mClient.getOutputStream())),
+ //                   true);
+ //           out.println(test);
+
+            OutputStream outStream = mClient.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(outStream);
+
+            if (messageLen > 0)
+            {
+                dos.write(messageBuffer, 0, messageLen);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

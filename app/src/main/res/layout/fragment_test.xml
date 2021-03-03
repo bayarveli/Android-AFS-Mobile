@@ -13,25 +13,89 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnFeedDecreaseSpeed"
+            android:layout_width="51dp"
+            android:layout_height="57dp"
+            android:layout_marginStart="108dp"
+            android:layout_marginLeft="108dp"
+            android:layout_marginBottom="44dp"
+            android:text="@string/decreaseSpeed"
+            app:layout_constraintBottom_toTopOf="@+id/btnFeedStop"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnFeedIncreaseSpeed"
+            android:layout_width="51dp"
+            android:layout_height="57dp"
+            android:layout_marginEnd="108dp"
+            android:layout_marginRight="108dp"
+            android:layout_marginBottom="44dp"
+            android:text="@string/increaseSpeed"
+            app:layout_constraintBottom_toTopOf="@+id/btnFeedStart"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/feedSpeed"
+            android:layout_width="65dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="192dp"
+            android:autofillHints=""
+            android:ems="16"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnMoveIncreaseSpeed"
+            app:layout_constraintHorizontal_bias="0.875"
+            app:layout_constraintStart_toEndOf="@+id/btnMoveDecreaseSpeed" />
+
+        <Button
+            android:id="@+id/btnMoveLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:text="@string/moveLeft"
-            app:layout_constraintBottom_toTopOf="@+id/button4"
-            app:layout_constraintEnd_toStartOf="@+id/button4" />
+            app:layout_constraintBottom_toTopOf="@+id/btnMoveStop"
+            app:layout_constraintEnd_toStartOf="@+id/btnMoveStop" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btnFeedStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:layout_marginLeft="68dp"
+            android:layout_marginBottom="100dp"
+            android:text="@string/stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnMoveRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:text="@string/moveRight"
-            app:layout_constraintBottom_toTopOf="@+id/button4"
-            app:layout_constraintStart_toEndOf="@+id/button4" />
+            app:layout_constraintBottom_toTopOf="@+id/btnMoveStop"
+            app:layout_constraintStart_toEndOf="@+id/btnMoveStop" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btnFeedStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="72dp"
+            android:layout_marginRight="72dp"
+            android:layout_marginBottom="100dp"
+            android:text="@string/start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/btnMoveStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="292dp"
@@ -42,35 +106,57 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/btnMoveDecreaseSpeed"
             android:layout_width="51dp"
             android:layout_height="57dp"
             android:layout_marginStart="108dp"
             android:layout_marginLeft="108dp"
             android:layout_marginBottom="48dp"
             android:text="@string/decreaseSpeed"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintBottom_toTopOf="@+id/btnMoveLeft"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btnMoveIncreaseSpeed"
             android:layout_width="51dp"
             android:layout_height="57dp"
             android:layout_marginEnd="108dp"
             android:layout_marginRight="108dp"
             android:layout_marginBottom="48dp"
             android:text="@string/increaseSpeed"
-            app:layout_constraintBottom_toTopOf="@+id/button3"
+            app:layout_constraintBottom_toTopOf="@+id/btnMoveRight"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="108dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="80dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button4" />
+            app:layout_constraintTop_toBottomOf="@+id/btnMoveStop" />
+
+        <EditText
+            android:id="@+id/etxtMoveSpeed"
+            android:layout_width="65dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:autofillHints=""
+            android:ems="16"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btnMoveIncreaseSpeed"
+            app:layout_constraintHorizontal_bias="0.875"
+            app:layout_constraintStart_toEndOf="@+id/btnMoveDecreaseSpeed"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

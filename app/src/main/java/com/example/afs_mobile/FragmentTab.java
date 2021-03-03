@@ -1,64 +1,128 @@
 package com.example.afs_mobile;
 
+
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentTab#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FragmentTab extends Fragment {
+import java.util.Calendar;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class FragmentTab extends Fragment implements TimePickerDialog.OnTimeSetListener {
 
-    public FragmentTab() {
-        // Required empty public constructor
-    }
+    public static final String ARG_OBJECT = "object";
+    TextView time;
+    Calendar calendar;
+    int hour, minute;
+    TimePickerDialog timePickerDialog ;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentTab.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentTab newInstance(String param1, String param2) {
-        FragmentTab fragment = new FragmentTab();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    NumberPicker numPickOne;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public static int numpickVal = 30;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_tab, container, false);
+
+//        NumberPicker numberPicker1 = (NumberPicker) view.findViewById(R.id.numPick1);
+//        numberPicker1.setMaxValue(59);
+//        numberPicker1.setMinValue(0);
+//        numberPicker1.setValue(30);
+//        NumberPicker numberPicker2 = (NumberPicker) view.findViewById(R.id.numPick2);
+//        numberPicker2.setMaxValue(59);
+//        numberPicker2.setMinValue(0);
+//        numberPicker2.setValue(30);
+//        NumberPicker numberPicker3 = (NumberPicker) view.findViewById(R.id.numPick3);
+//        numberPicker3.setMaxValue(59);
+//        numberPicker3.setMinValue(0);
+//        numberPicker3.setValue(30);
+//        NumberPicker numberPicker4 = (NumberPicker) view.findViewById(R.id.numPick4);
+//        numberPicker4.setMaxValue(59);
+//        numberPicker4.setMinValue(0);
+//        numberPicker4.setValue(30);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState)
+    {
+
+        numPickOne = (NumberPicker) view.findViewById(R.id.numPick1);
+        numPickOne.setMaxValue(59);
+        numPickOne.setMinValue(0);
+        numPickOne.setValue(30);
+
+        numPickOne.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                numpickVal = newVal;
+                Log.d("TASK", "Set value change: " + numpickVal);
+            }
+        });
+
+        NumberPicker numberPicker2 = (NumberPicker) view.findViewById(R.id.numPick2);
+        numberPicker2.setMaxValue(59);
+        numberPicker2.setMinValue(0);
+        numberPicker2.setValue(30);
+        NumberPicker numberPicker3 = (NumberPicker) view.findViewById(R.id.numPick3);
+        numberPicker3.setMaxValue(59);
+        numberPicker3.setMinValue(0);
+        numberPicker3.setValue(30);
+        NumberPicker numberPicker4 = (NumberPicker) view.findViewById(R.id.numPick4);
+        numberPicker4.setMaxValue(59);
+        numberPicker4.setMinValue(0);
+        numberPicker4.setValue(30);
+
+        Bundle args = getArguments();
+//        ((TextView) view.findViewById(R.id.textView)).setText(Integer.toString(args.getInt(ARG_OBJECT)));
+
+        calendar = Calendar.getInstance();
+        time = (TextView) view.findViewById(R.id.etxt_taskTime);
+        time.setText(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+
+        ((TextView) view.findViewById(R.id.etxt_taskTime)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker();
+            }
+        });
+    }
+
+
+    public int getNumPickData()
+    {
+        Log.d("TASK", "Number Picker Val: " + numpickVal);
+        return numpickVal;
+    }
+
+
+    //display time picker dialog
+    public void timePicker() {
+
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
+        timePickerDialog = new TimePickerDialog(getActivity(), this, hour, minute, true);
+        timePickerDialog.show();
+    }
+    //display selected time
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        time.setText(hourOfDay + ":" + minute);
     }
 }

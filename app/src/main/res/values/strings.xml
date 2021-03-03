@@ -9,4 +9,18 @@
     <string name="moveStop">Stop</string>
     <string name="decreaseSpeed">-</string>
     <string name="increaseSpeed">+</string>
+    <string name="stop">STOP</string>
+    <string name="start">Start</string>
+    <string name="baglan">BAĞLAN</string>
+    <string name="g_rev_1">Görev-1</string>
+    <string name="g_rev_2">Görev-2</string>
+    <string name="g_rev_3">Görev-3</string>
+    <string name="g_rev_4">Görev-4</string>
+    <string name="g_rev_5">Görev-5</string>
+    <string name="g_rev_6">Görev-6</string>
+    <string name="g_rev_7">Görev-7</string>
+    <string name="g_rev_8">Görev-8</string>
+    <string name="g_rev_9">Görev-9</string>
+    <string name="g_rev_10">Görev-10</string>
+    <string name="aktif">Aktif</string>
 </resources>
