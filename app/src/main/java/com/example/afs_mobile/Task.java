@@ -22,12 +22,14 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.example.afs_mobile.TabDataStructure;
 
 
 public class Task extends Fragment {
@@ -38,6 +40,7 @@ public class Task extends Fragment {
     Button sendButton;
 
     int currentPage = 0;
+    TabDataStructure mTabDataList[] = new TabDataStructure[5];
 
     @Nullable
     @Override
@@ -46,14 +49,12 @@ public class Task extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_task, container, false);
 
-
-
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        pagerAdapter = new PagerAdapter(getFragmentManager());
+        pagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
         viewPager = view.findViewById(R.id.pager);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
 
@@ -63,7 +64,6 @@ public class Task extends Fragment {
 
         tabLayout.setupWithViewPager(viewPager);
 
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -72,10 +72,8 @@ public class Task extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-//                Toast.makeText(getActivity().getApplicationContext(),
-//                        "Selected page position: " + position, Toast.LENGTH_SHORT).show();
                 currentPage = position;
-                Log.d("TASK", "Selected:" + position + " - " + currentPage);
+                Log.d("TASK", "Selected >> " + currentPage);
             }
 
             @Override
@@ -84,81 +82,27 @@ public class Task extends Fragment {
             }
         });
 
-
         sendButton = (Button) view.findViewById(R.id.btnSendToDevice);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentPage == 0)
-                {
-                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
 
-                    if (null != tabNow)
-                    {
-                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
-                    }
-                    else {
-                        Log.d("TASK", "Fragment tab is NULL!");
-                    }
+                List<Fragment> listOfFragments = getActivity().getSupportFragmentManager().getFragments();
+                //! First fragment is the navigation host fragment
+                FragmentTab tabNow = (FragmentTab) listOfFragments.get(currentPage + 1);
 
-                }
-                else if (currentPage == 1)
-                {
-                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
-
-                    if (null != tabNow)
-                    {
-                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
-                    }
-                    else {
-                        Log.d("TASK", "Fragment tab is NULL!");
-                    }
-                }
-                else if (currentPage == 2)
-                {
-                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
-
-                    if (null != tabNow)
-                    {
-                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
-                    }
-                    else {
-                        Log.d("TASK", "Fragment tab is NULL!");
-                    }
-                }
-                else if (currentPage == 3)
-                {
-                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
-
-                    if (null != tabNow)
-                    {
-                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
-                    }
-                    else {
-                        Log.d("TASK", "Fragment tab is NULL!");
-                    }
-                }
-                else if (currentPage == 4)
-                {
-                    FragmentTab tabNow = (FragmentTab) pagerAdapter.getItem(currentPage);
-
-                    if (null != tabNow)
-                    {
-                        Log.d("TASK", "Current Page: " + currentPage + " Selected Value: " + tabNow.getNumPickData());
-                    }
-                    else {
-                        Log.d("TASK", "Fragment tab is NULL!");
-                    }
+                if (null != tabNow) {
+                    Log.d("TASK", "Tab Index: " + currentPage);
+                    Log.d("TASK", "isActivated: " + tabNow.mTabData.mIsActivated);
+                    Log.d("TASK", "Hour: " + tabNow.mTabData.mTaskTimeHour);
+                    Log.d("TASK", "Minute: " + tabNow.mTabData.mTaskTimeMinute);
+                    Log.d("TASK", "Drive Time: " + tabNow.mTabData.mPondTime);
+                    Log.d("TASK", "Feed Time: " + tabNow.mTabData.mFeedingTime);
                 }
             }
         });
 
-    }
-
-    private static String makeFragmentName(int viewPagerId, int index)
-    {
-        return "android:switcher:" + viewPagerId + ":" + index;
     }
 }
 
