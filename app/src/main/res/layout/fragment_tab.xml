@@ -174,6 +174,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
+
                 <TableRow
                     android:id="@+id/trPond1"
                     android:layout_width="match_parent"
@@ -692,6 +694,312 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </TableRow>
+
+                <TableRow
+                    android:id="@+id/trPond11"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/lblPond11"
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@null"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="2"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <NumberPicker
+                            android:id="@+id/npDriveTime11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginLeft="48dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lblPond11" />
+
+                        <NumberPicker
+                            android:id="@+id/npPondTime11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="89dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/npDriveTime11" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/trPond12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/purple_200"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/lblPond12"
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@null"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="2"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <NumberPicker
+                            android:id="@+id/npDriveTime12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginLeft="48dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lblPond12" />
+
+                        <NumberPicker
+                            android:id="@+id/npPondTime12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="89dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/npDriveTime12" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/trPond13"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/lblPond13"
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@null"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="2"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <NumberPicker
+                            android:id="@+id/npDriveTime13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginLeft="48dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lblPond13" />
+
+                        <NumberPicker
+                            android:id="@+id/npPondTime13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="89dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/npDriveTime13" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/trPond14"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/purple_200"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/lblPond14"
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@null"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="2"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <NumberPicker
+                            android:id="@+id/npDriveTime14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginLeft="48dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lblPond14" />
+
+                        <NumberPicker
+                            android:id="@+id/npPondTime14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="89dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/npDriveTime14" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/trPond15"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/lblPond15"
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@null"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="2"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <NumberPicker
+                            android:id="@+id/npDriveTime15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginLeft="48dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lblPond15" />
+
+                        <NumberPicker
+                            android:id="@+id/npPondTime15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="89dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/npDriveTime15" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </TableRow>
+                <TableRow
+                    android:id="@+id/trPond16"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/purple_200"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/lblPond16"
+                            android:layout_width="84dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:background="@null"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:text="2"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <NumberPicker
+                            android:id="@+id/npDriveTime16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="48dp"
+                            android:layout_marginLeft="48dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lblPond16" />
+
+                        <NumberPicker
+                            android:id="@+id/npPondTime16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="89dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/npDriveTime16" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </TableRow>
+
             </LinearLayout>
         </ScrollView>
 

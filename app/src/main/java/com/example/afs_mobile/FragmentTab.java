@@ -26,56 +26,71 @@ import java.util.Calendar;
 
 public class FragmentTab extends Fragment implements TimePickerDialog.OnTimeSetListener {
 
+    // TODO: There is two way to select pond choice (First is selected for now)
+    // First is that user can order operable ponds with drive time
+    // Second is that checkboxes can be added to each pond selected (16 ponds)
     public static final String ARG_OBJECT = "object";
     TextView time;
     Calendar calendar;
     int hour, minute;
     TimePickerDialog timePickerDialog ;
-
-    NumberPicker mPond1DriveTime;
-    NumberPicker mPond1FeedTime;
-
     CheckBox mIsEnabled;
-
-    EditText mLabel1;
-    EditText mLabel2;
-    EditText mLabel3;
-    EditText mLabel4;
-    EditText mLabel5;
-    EditText mLabel6;
-    EditText mLabel7;
-    EditText mLabel8;
-    EditText mLabel9;
-    EditText mLabel10;
-
     TabDataStructure mTabData = new TabDataStructure();;
+
+    int[] mLabelIdList = new int[]
+            {
+                    R.id.lblPond1, R.id.lblPond2, R.id.lblPond3, R.id.lblPond4,
+                    R.id.lblPond5, R.id.lblPond6, R.id.lblPond7, R.id.lblPond8,
+                    R.id.lblPond9, R.id.lblPond10, R.id.lblPond11, R.id.lblPond12,
+                    R.id.lblPond13, R.id.lblPond14, R.id.lblPond15, R.id.lblPond16
+            };
+
+    int[] mNumPickDriveIdList = new int[]
+            {
+                    R.id.npDriveTime1, R.id.npDriveTime2, R.id.npDriveTime3, R.id.npDriveTime4,
+                    R.id.npDriveTime5, R.id.npDriveTime6, R.id.npDriveTime7, R.id.npDriveTime8,
+                    R.id.npDriveTime9, R.id.npDriveTime10, R.id.npDriveTime11, R.id.npDriveTime12,
+                    R.id.npDriveTime13, R.id.npDriveTime14, R.id.npDriveTime15, R.id.npDriveTime16
+            };
+
+
+    int[] mNumPickPondIdList = new int[]
+            {
+                    R.id.npPondTime1, R.id.npPondTime2, R.id.npPondTime3, R.id.npPondTime4,
+                    R.id.npPondTime5, R.id.npPondTime6, R.id.npPondTime7, R.id.npPondTime8,
+                    R.id.npPondTime9, R.id.npPondTime10, R.id.npPondTime11, R.id.npPondTime12,
+                    R.id.npPondTime13, R.id.npPondTime14, R.id.npPondTime15, R.id.npPondTime16
+            };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
         // Inflate the layout for this fragment
-        mLabel1 = (EditText) view.findViewById(R.id.lblPond1);
-        mLabel2 = (EditText) view.findViewById(R.id.lblPond2);
-        mLabel3 = (EditText) view.findViewById(R.id.lblPond3);
-        mLabel4 = (EditText) view.findViewById(R.id.lblPond4);
-        mLabel5 = (EditText) view.findViewById(R.id.lblPond5);
-        mLabel6 = (EditText) view.findViewById(R.id.lblPond6);
-        mLabel7 = (EditText) view.findViewById(R.id.lblPond7);
-        mLabel8 = (EditText) view.findViewById(R.id.lblPond8);
-        mLabel9 = (EditText) view.findViewById(R.id.lblPond9);
-        mLabel10 = (EditText) view.findViewById(R.id.lblPond10);
 
-        mLabel1.setText("1");
-        mLabel2.setText("2");
-        mLabel3.setText("3");
-        mLabel4.setText("4");
-        mLabel5.setText("5");
-        mLabel6.setText("6");
-        mLabel7.setText("7");
-        mLabel8.setText("8");
-        mLabel9.setText("9");
-        mLabel10.setText("10");
+        for (int idx = 0; idx < mLabelIdList.length; idx++)
+        {
+            EditText t = (EditText) view.findViewById(mLabelIdList[idx]);
+            t.setText(Integer.toString(idx + 1));
+        }
+
+        for (int idx = 0; idx < mNumPickDriveIdList.length; idx++)
+        {
+            NumberPicker t = (NumberPicker) view.findViewById(mNumPickDriveIdList[idx]);
+            t.setMinValue(0);
+            t.setMaxValue(59);
+            t.setValue(0);
+            mTabData.mPondTime[idx] = 0;
+        }
+
+        for (int idx = 0; idx < mNumPickPondIdList.length; idx++)
+        {
+            NumberPicker t = (NumberPicker) view.findViewById(mNumPickPondIdList[idx]);
+            t.setMinValue(0);
+            t.setMaxValue(59);
+            t.setValue(0);
+            mTabData.mFeedingTime[idx] = 0;
+        }
 
         return view;
     }
@@ -83,59 +98,54 @@ public class FragmentTab extends Fragment implements TimePickerDialog.OnTimeSetL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState)
     {
-
-
+        //
         mIsEnabled = (CheckBox) view.findViewById(R.id.chk_taskActive);
 
         mIsEnabled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mTabData.mIsActivated = mIsEnabled.isChecked();
-                Log.d("TASK", "Check: " + mTabData.mIsActivated);
+                // TODO: Enable or disable all controls according to isActivated checkbox
             }
         });
 
-        mPond1DriveTime = (NumberPicker) view.findViewById(R.id.npDriveTime1);
-        mPond1DriveTime.setMaxValue(59);
-        mPond1DriveTime.setMinValue(0);
-        mPond1DriveTime.setValue(30);
+        //
+        for (int idx = 0; idx < mNumPickDriveIdList.length; idx++)
+        {
+            NumberPicker npDrive = (NumberPicker) view.findViewById(mNumPickDriveIdList[idx]);
 
-        mPond1DriveTime.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mTabData.mPondTime = newVal;
-                Log.d("TASK", "NumPick Drive: " + mTabData.mPondTime);
-            }
-        });
+            int finalIdx = idx;
+            npDrive.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    mTabData.mPondTime[finalIdx] = newVal;
+                    // TODO: Enable the following table row sequentially.
+                }
+            });
 
-        mPond1FeedTime = (NumberPicker) view.findViewById(R.id.npPondTime1);
-        mPond1FeedTime.setMaxValue(59);
-        mPond1FeedTime.setMinValue(0);
-        mPond1FeedTime.setValue(30);
 
-        mPond1FeedTime.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mTabData.mFeedingTime = newVal;
-                Log.d("TASK", "NumPick Feed: " + mTabData.mFeedingTime);
-            }
-        });
+            NumberPicker npFeed = (NumberPicker) view.findViewById(mNumPickPondIdList[idx]);
 
-        NumberPicker numberPicker3 = (NumberPicker) view.findViewById(R.id.npDriveTime2);
-        numberPicker3.setMaxValue(59);
-        numberPicker3.setMinValue(0);
-        numberPicker3.setValue(30);
-        NumberPicker numberPicker4 = (NumberPicker) view.findViewById(R.id.npPondTime2);
-        numberPicker4.setMaxValue(59);
-        numberPicker4.setMinValue(0);
-        numberPicker4.setValue(30);
+            npFeed.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    mTabData.mFeedingTime[finalIdx] = newVal;
+                }
+            });
+        }
 
+        //
         calendar = Calendar.getInstance();
         time = (TextView) view.findViewById(R.id.etxt_taskTime);
         time.setText(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
 
+        mTabData.mTaskTimeYear = calendar.get(Calendar.YEAR);
+        mTabData.mTaskTimeMonth = calendar.get(Calendar.MONTH);
+        mTabData.mTaskTimeDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mTabData.mTaskTimeDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         mTabData.mTaskTimeMinute = calendar.get(Calendar.MINUTE);
         mTabData.mTaskTimeHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mTabData.mTaskTimeSecond = 0;
 
         ((TextView) view.findViewById(R.id.etxt_taskTime)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +173,12 @@ public class FragmentTab extends Fragment implements TimePickerDialog.OnTimeSetL
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         time.setText(hourOfDay + ":" + minute);
 
+        mTabData.mTaskTimeYear = calendar.get(Calendar.YEAR);
+        mTabData.mTaskTimeMonth = calendar.get(Calendar.MONTH);
+        mTabData.mTaskTimeDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mTabData.mTaskTimeDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         mTabData.mTaskTimeHour = hourOfDay;
         mTabData.mTaskTimeMinute = minute;
+        mTabData.mTaskTimeSecond = 0;
     }
 }

@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -21,6 +19,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         Fragment fragment = new FragmentTab();
         Bundle args = new Bundle();
 
+
         args.putInt(FragmentTab.ARG_OBJECT, i);
         fragment.setArguments(args);
         return fragment;
@@ -29,7 +28,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount()
     {
-        return 5;
+        return AppParamConfig.SYSTEM_POND_COUNT;
     }
 
     @Override
