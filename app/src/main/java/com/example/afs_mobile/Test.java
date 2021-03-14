@@ -1,23 +1,20 @@
 package com.example.afs_mobile;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.StrictMode;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.BufferedWriter;
+import androidx.fragment.app.Fragment;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -32,6 +29,9 @@ public class Test extends Fragment implements View.OnClickListener {
     private int mFeedSpeedCounter = 130;
     private EditText mMoveSpeedText;
     private EditText mFeedSpeedText;
+
+    byte[] messageBuffer = new byte[8];
+    int messageLen = 0;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -113,14 +113,48 @@ public class Test extends Fragment implements View.OnClickListener {
         speedDecreaseButton.setOnClickListener(this);
         speedIncreaseButton.setOnClickListener(this);
 
+        messageBuffer[0] = AppParamConfig.SYSTEM_MSD_ID_START_CONFIG;
+        messageLen = 1;
+
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(mClient.getOutputStream())),
-                    true);
-            out.println("Come to Test");
-        } catch (IOException e) {
+            OutputStream outStream = mClient.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(outStream);
+
+            if (messageLen > 0)
+            {
+                dos.write(messageBuffer, 0, messageLen);
+            }
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK)
+                {
+                    messageBuffer[0] = AppParamConfig.SYSTEM_MSD_ID_END_CONFIG;
+                    messageLen = 1;
+
+                    try {
+                        OutputStream outStream = mClient.getOutputStream();
+                        DataOutputStream dos = new DataOutputStream(outStream);
+
+                        if (messageLen > 0)
+                        {
+                            dos.write(messageBuffer, 0, messageLen);
+                        }
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -128,10 +162,6 @@ public class Test extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
-        String test = null;
-        byte[] messageBuffer = new byte[8];
-        int messageLen = 0;
 
         switch (v.getId()) {
             case R.id.btnMoveLeft:
@@ -203,11 +233,6 @@ public class Test extends Fragment implements View.OnClickListener {
         }
 
         try {
- //           PrintWriter out = new PrintWriter(new BufferedWriter(
- //                   new OutputStreamWriter(mClient.getOutputStream())),
- //                   true);
- //           out.println(test);
-
             OutputStream outStream = mClient.getOutputStream();
             DataOutputStream dos = new DataOutputStream(outStream);
 

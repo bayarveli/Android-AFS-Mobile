@@ -1,11 +1,15 @@
 package com.example.afs_mobile;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.pdf.PdfDocument;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -13,17 +17,27 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.StrictMode;
 import android.text.NoCopySpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,11 +55,17 @@ public class Task extends Fragment {
     PagerAdapter pagerAdapter;
     ViewPager viewPager;
     Button sendButton;
+    private Context mAppContext;
 
     int currentPage = 0;
     TabDataStructure mTabDataList[] = new TabDataStructure[AppParamConfig.SYSTEM_POND_COUNT];
 
     byte[] messageBuffer = new byte[600];
+    byte[] configMessageBuffer = new byte[8];
+    byte[] testMsg = new byte[61];
+    int configMsgBufferLen = 0;
+
+    SendConfigTask sendData = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +83,26 @@ public class Task extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_task, container, false);
 
+        mAppContext = getActivity().getApplicationContext();
+
+        // TODO: send a message to device that changes mode to config
+
+        configMessageBuffer[0] = AppParamConfig.SYSTEM_MSD_ID_START_CONFIG;
+        configMsgBufferLen = 1;
+
+        try {
+            OutputStream outStream = mClient.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(outStream);
+
+            if (configMsgBufferLen > 0)
+            {
+                dos.write(configMessageBuffer, 0, configMsgBufferLen);
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         return view;
     }
 
@@ -77,6 +117,33 @@ public class Task extends Fragment {
         viewPager.setAdapter(pagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK)
+                {
+                    configMessageBuffer[0] = AppParamConfig.SYSTEM_MSD_ID_END_CONFIG;
+                    configMsgBufferLen = 1;
+
+                    try {
+                        OutputStream outStream = mClient.getOutputStream();
+                        DataOutputStream dos = new DataOutputStream(outStream);
+
+                        if (configMsgBufferLen > 0)
+                        {
+                            dos.write(configMessageBuffer, 0, configMsgBufferLen);
+                        }
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
+            }
+        });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -131,15 +198,8 @@ public class Task extends Fragment {
                         offset += 3;
                     }
 
-//                    Log.d("TASK", "Tab Index: " + currentPage);
-//                    Log.d("TASK", "isActivated: " + tabNow.mTabData.mIsActivated);
-//                    Log.d("TASK", "Hour: " + tabNow.mTabData.mTaskTimeHour);
-//                    Log.d("TASK", "Minute: " + tabNow.mTabData.mTaskTimeMinute);
-//                    for (int i = 0; i < 16; i++) {
-//                        Log.d("TASK", "Pond: " + i);
-//                        Log.d("TASK", "Drive Time: " + tabNow.mTabData.mPondTime[i]);
-//                        Log.d("TASK", "Feed Time: " + tabNow.mTabData.mFeedingTime[i]);
-//                    }
+                    Log.d("TASK", byteToHexString(messageBuffer));
+
                 }
 
             }
@@ -215,12 +275,124 @@ public class Task extends Fragment {
 
                     // TODO: run a thread for send config
                     // TODO: send config for each task
+                    sendData = new SendConfigTask(getActivity());
+                    sendData.execute();
+
                 }
             }
         });
+    }
 
+    public class SendConfigTask extends AsyncTask<Void, Integer, Void>
+    {
+        private ProgressDialog dialog;
 
+        public SendConfigTask(FragmentActivity activity)
+        {
+            dialog = new ProgressDialog(activity);
+        }
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (mClient.isConnected())
+            {
+                DataOutputStream dos = null;
+                DataInputStream dis = null;
+
+                try {
+                    dos = new DataOutputStream(mClient.getOutputStream());
+                    dis = new DataInputStream(mClient.getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                for (int i = 0; i < AppParamConfig.SYSTEM_POND_COUNT; i++) {
+                    try {
+                        byte[] sendResponse = new byte[2];
+                        // If task is activated then send this data
+                        if (messageBuffer[(i * 60) + 2] == 0x01) {
+                            testMsg[0] = AppParamConfig.SYSTEM_MSG_ID_TASK_INFO;
+                            for (int j = 0; j < 60; j++)
+                            {
+                                testMsg[j + 1] = messageBuffer[(i * 60) + j];
+                            }
+                            dos.write(testMsg, 0, 61);
+
+                            int result = dis.read(sendResponse);
+
+                            Thread.sleep(1000);
+
+                            if (result > 0)
+                            {
+                                if (AppParamConfig.SYSTEM_MSG_ID_TASK_INFO_RESP == sendResponse[0])
+                                {
+                                    if (0x11 == sendResponse[1])
+                                    {
+                                        // TODO: Handle config send case is success
+                                        String toastMessage = "Task Config " + i + " is sent.";
+                                        Log.d("TASK", toastMessage);
+
+                                    }
+                                    else if (0xFF == sendResponse[1])
+                                    {
+                                        // TODO: Handle config send fail case
+                                        String toastMessage = "Task Config " + i + " is not sent.";
+                                        Log.d("TASK", toastMessage);
+                                    }
+                                    else
+                                    {
+                                        Log.d("TASK", "Invalid response format.");
+                                    }
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Log.d("TASK", "Task " + i + "is not activated.");
+                        }
+                        publishProgress((i + 1));
+
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            else
+            {
+                Log.d("TASK", "Socket is not connected.");
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog.setMessage("Konfigürasyon yükleme:");
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.setProgress(0);
+            dialog.setMax(10);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (dialog.isShowing())
+            {
+                dialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            dialog.setProgress(values[0]);
+        }
     }
 
     private String byteToHexString(byte[] payload) {

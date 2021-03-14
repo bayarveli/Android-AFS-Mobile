@@ -13,6 +13,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,8 +102,8 @@ public class Home extends Fragment implements View.OnClickListener {
         mPortNumber = (EditText) view.findViewById(R.id.etxtPort);
         mIpAddress = (EditText) view.findViewById(R.id.etxtIpAddress);
 
-        mPortNumber.setText("13001");
-        mIpAddress.setText("192.168.1.25");
+        mPortNumber.setText("1001");
+        mIpAddress.setText("192.168.4.1");
 
         InputFilter[] filters = new InputFilter[1];
 
@@ -195,7 +196,7 @@ public class Home extends Fragment implements View.OnClickListener {
 
                         if ((SERVER_PORT > 0) && (SERVER_PORT < 65354))
                         {
-                            Toast.makeText(mAppContext, "Bağlanıyor.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mAppContext, "Bağlanıyor.", Toast.LENGTH_SHORT).show();
 
                             // run socket thread
                             new Thread(new ClientThread()).start();

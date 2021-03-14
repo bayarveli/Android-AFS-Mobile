@@ -19,4 +19,5 @@ public class AppParamConfig {
     public static final int SYSTEM_MSG_ID_FEED_STOP = 0x0C;
     public static final int SYSTEM_MSG_ID_FEED_SET_SPEED = 0x0D;
     public static final int SYSTEM_MSG_ID_ABORT_TASK = 0x99;
+    public static final int SYSTEM_MSG_ID_TASK_INFO_RESP = 0x0E;
 }
